@@ -1,5 +1,5 @@
 {
-  "name": "@id49/yellowstone",
+  "name": "yellowstone",
   "version": "3.0.2",
   "description": "An RTSP client for node.js.",
   "main": "dist/index.js",
