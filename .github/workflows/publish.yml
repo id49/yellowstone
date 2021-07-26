@@ -12,10 +12,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '12.x'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://npm.pkg.github.com/'
           scope: '@id49'
       - run: npm install
       - run: npm run build
       - run: npm publish --access public --scope @id49
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
