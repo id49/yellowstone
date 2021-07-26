@@ -1,11 +1,11 @@
 {
-  "name": "yellowstone",
-  "version": "3.0.2",
+  "name": "@id49/yellowstone",
+  "version": "1.0.1",
   "description": "An RTSP client for node.js.",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mbullington/yellowstone.git"
+    "url": "https://github.com/id49/yellowstone.git"
   },
   "author": "Michael Bullington <mikebullingtn@gmail.com>",
   "license": "MIT",
