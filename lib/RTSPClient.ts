@@ -79,17 +79,19 @@ export default class RTSPClient extends EventEmitter {
   // Used for parsing RTP/RTCP responses.
 
   rtspPacketLength: number = 0;
-  rtspPacket: Buffer = new Buffer("");
+  rtspPacket: Buffer = Buffer.from("");
   rtspPacketPointer: number = 0;
 
   // Used in #_emptyReceiverReport.
   clientSSRC = generateSSRC();
+
 
   constructor(
     username: string,
     password: string,
     headers?: { [key: string]: string }
   ) {
+
     super();
 
     this.username = username;
@@ -211,14 +213,8 @@ export default class RTSPClient extends EventEmitter {
         }
       }
 
-      if (
-        mediaSource.type === "audio" &&
-        mediaSource.protocol === RTP_AVP &&
-        // @ts-ignore
-        mediaSource.rtp[0].codec === "mpeg4-generic" &&
-        // @ts-ignore
-        mediaSource.fmtp[0].config.includes("AAC")
-      ) {
+      // @ts-ignore
+      if (mediaSource.type === "audio" && mediaSource.protocol === RTP_AVP && mediaSource.rtp[0].codec === "mpeg4-generic" && mediaSource.fmtp[0].config.includes('AAC')) {
         this.emit("log", "AAC Audio Stream Found in SDP", "");
         if (hasAudio == false) {
           needSetup = true;
@@ -227,12 +223,9 @@ export default class RTSPClient extends EventEmitter {
         }
       }
 
-      if (
-        mediaSource.type === "appliction" &&
-        mediaSource.protocol === RTP_AVP &&
-        // @ts-ignore
-        mediaSource.rtp[0].codec === "VND.ONVIF.METADATA"
-      ) {
+
+      // @ts-ignore
+      if (mediaSource.type === "appliction" && mediaSource.protocol === RTP_AVP && mediaSource.rtp[0].codec === "VND.ONVIF.METADATA") {
         this.emit("log", "ONVIF Meta Data Found in SDP", "");
         if (hasMetaData == false) {
           needSetup = true;
@@ -479,9 +472,7 @@ export default class RTSPClient extends EventEmitter {
             } else if (type === "Basic") {
               // Basic Authentication
               // https://xkcd.com/538/
-              const b64 = new Buffer(
-                `${this.username}:${this.password}`
-              ).toString("base64");
+              const b64 = Buffer.from(`${this.username}:${this.password}`).toString("base64");
               authString = `Basic ${b64}`;
             }
 
@@ -596,7 +587,7 @@ export default class RTSPClient extends EventEmitter {
             (this.messageBytes[2] << 8) + this.messageBytes[3];
 
           if (this.rtspPacketLength > 0) {
-            this.rtspPacket = new Buffer(this.rtspPacketLength);
+            this.rtspPacket = Buffer.alloc(this.rtspPacketLength);
             this.rtspPacketPointer = 0;
             this.readState = ReadStates.READING_RAW_PACKET;
           } else {
@@ -734,7 +725,7 @@ export default class RTSPClient extends EventEmitter {
     const req = `${buffer.length} bytes of interleaved data on channel ${channel}`;
     this.emit("log", req, "C->S");
 
-    const header = new Buffer(4);
+    const header = Buffer.alloc(4);
     header[0] = 0x24; // ascii $
     header[1] = channel;
     header[2] = (buffer.length >> 8) & 0xff;
@@ -753,7 +744,7 @@ export default class RTSPClient extends EventEmitter {
   }
 
   _emptyReceiverReport(): Buffer {
-    const report = new Buffer(8);
+    const report = Buffer.alloc(8);
     const version = 2;
     const paddingBit = 0;
     const reportCount = 0; // an empty report
